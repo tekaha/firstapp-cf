@@ -28,8 +28,16 @@ public class BusinessPartnerServlet extends HttpServlet {
     protected void doGet(final HttpServletRequest request, final HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            final List<BusinessPartner> businessPartners =
-                    new GetBusinessPartnersCommand().execute();
+            final String category = request.getParameter("category");
+            final List<BusinessPartner> businessPartners;
+
+            if (category == null) {
+                logger.info("Retrieving all business partners");
+                businessPartners =new GetCachedBusinessPartnersCommand().execute();
+            } else {
+                logger.info("Retrieving business partners for category {}", category);
+                businessPartners = new GetCachedBusinessPartnersByCategoryCommand(category).execute();
+            }
 
             response.setContentType("application/json");
             response.getWriter().write(new Gson().toJson(businessPartners));
