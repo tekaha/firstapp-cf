@@ -1,0 +1,1 @@
+set ALLOW_MOCKED_AUTH_HEADER=true
