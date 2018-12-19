@@ -1,0 +1,1 @@
+set destinations=[{name: "ErpQueryEndpoint", url: "http://bupamockserver-env.bxk26zdvpt.eu-central-1.elasticbeanstalk.com", username: "u", password: "p"}]

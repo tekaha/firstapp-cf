@@ -6,7 +6,7 @@ applications:
     timeout: 300
     # random-route: true # used instead of "routes"
     routes:
-      - route: firstapp-cf-p1942925848.cfapps.eu10.hana.ondemand.com
+      - route: firstapp-cf-p1941832406.cfapps.eu10.hana.ondemand.com
     path: application/target/firstapp-cf-application.war
     buildpacks:
       - sap_java_buildpack
@@ -14,8 +14,9 @@ applications:
       TARGET_RUNTIME: tomee
       JBP_CONFIG_SAPJVM_MEMORY_SIZES: 'metaspace:96m..'
       SET_LOGGING_LEVEL: '{ROOT: INFO, com.sap.cloud.sdk: INFO}'
-#  services:
+      ALLOW_MOCKED_AUTH_HEADER: true
+    services:
+    - my-xsuaa
+    - my-destination
 #  - my-application-logs
-#  - my-xsuaa
-#  - my-destination
 #  - my-connectivity
