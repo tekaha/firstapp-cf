@@ -6,7 +6,7 @@ applications:
     timeout: 300
     # random-route: true # used instead of "routes"
     routes:
-      - route: firstapp-cf-p1941832406.cfapps.eu10.hana.ondemand.com
+      - route: firstapp-cf-p1941832406trial.cfapps.eu10.hana.ondemand.com
     path: application/target/firstapp-cf-application.war
     buildpacks:
       - sap_java_buildpack

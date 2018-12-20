@@ -1,0 +1,12 @@
+---
+applications:
+  - name: approuter
+    host: approuter-p1941832406trial
+    path: approuter
+    memory: 128M
+    buildpack: nodejs_buildpack
+    env:
+      TENANT_HOST_PATTERN: 'approuter-(.*).cfapps.eu10.hana.ondemand.com'
+      destinations: '[{"name":"app-destination", "url" :"https://firstapp-cf-p1941832406trial.cfapps.eu10.hana.ondemand.com", "forwardAuthToken": true}]'
+    services:
+      - my-xsuaa
