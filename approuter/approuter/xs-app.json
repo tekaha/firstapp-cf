@@ -1,8 +1,10 @@
 {
   "welcomeFile": "index.html",
   "routes": [{
+    "source": "^/businesspartners",
+    "destination": "business-partner-api"
+  },{
     "source": "/",
-    "target": "/",
-    "destination": "app-destination"
+    "destination": "business-partner-frontend"
   }]
 }

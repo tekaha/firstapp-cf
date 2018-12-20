@@ -7,6 +7,15 @@ applications:
     buildpack: nodejs_buildpack
     env:
       TENANT_HOST_PATTERN: 'approuter-(.*).cfapps.eu10.hana.ondemand.com'
-      destinations: '[{"name":"app-destination", "url" :"https://firstapp-cf-p1941832406trial.cfapps.eu10.hana.ondemand.com", "forwardAuthToken": true}]'
+      destinations: '[
+          {
+            "name":"business-partner-api",
+            "url" :"https://firstapp-cf-p1941832406trial.cfapps.eu10.hana.ondemand.com",
+            "forwardAuthToken": true
+          }, {
+            "name":"business-partner-frontend",
+            "url":"https://firstapp-cf-frontend-p1941832406trial.cfapps.eu10.hana.ondemand.com"
+          }
+      ]'
     services:
       - my-xsuaa

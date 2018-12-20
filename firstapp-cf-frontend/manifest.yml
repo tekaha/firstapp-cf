@@ -1,0 +1,6 @@
+---
+applications:
+  - name: firstapp-cf-frontend
+    memory: 64M
+    host: firstapp-cf-frontend-p1941832406trial
+    buildpack: staticfile_buildpack
