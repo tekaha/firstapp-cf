@@ -1,6 +1,6 @@
 **/credentials.*
 **/target/
-/s4hana_pipeline
+**/s4hana_pipeline
 **/*.log
 **/*.trc
 **/.settings/
