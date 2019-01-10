@@ -1,0 +1,70 @@
+_schema-version: '2.0'
+ID: portal-site-d88d4760-14e3-11e9-bf5d-156f91c4eb38
+version: 1.2.0
+modules:
+  - name: site-entry-d88d4760-14e3-11e9-bf5d-156f91c4eb38
+    type: javascript.nodejs
+    path: site-entry/
+    properties:
+      TENANT_HOST_PATTERN: '(.*)-flp-tutorial.cfapps.eu10.hana.ondemand.com'
+    parameters:
+      memory: 256M
+    requires:
+      - name: site-host-d88d4760-14e3-11e9-bf5d-156f91c4eb38
+      - name: portal-uaa
+      - name: sapui5-provider
+        properties:
+          sapui5url: '~{url}'
+      - name: tutorial-frontend
+        group: destinations
+        properties:
+          name: frontend
+          url: ~{url}
+      - name: tutorial-backend
+        group: destinations
+        properties:
+          name: backend
+          url: ~{url}
+          forwardAuthToken: true
+  - name: site-content-d88d4760-14e3-11e9-bf5d-156f91c4eb38
+    type: com.sap.portal.site-content
+    path: site-content/
+    parameters:
+      health-check-type: none
+      memory: 128M
+    requires:
+      - name: site-client-d88d4760-14e3-11e9-bf5d-156f91c4eb38
+      - name: portal-uaa
+resources:
+  - name: site-host-d88d4760-14e3-11e9-bf5d-156f91c4eb38
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: portal-services
+      service-plan: site-host
+      config:
+        siteId: d88d4760-14e3-11e9-bf5d-156f91c4eb38
+  - name: portal-uaa
+    type: org.cloudfoundry.existing-service
+    parameters:
+      service-name: my-xsuaa
+      service: xsuaa
+      service-plan: application
+      config:
+        xsappname: site-entry-d88d4760-14e3-11e9-bf5d-156f91c4eb38
+        tenant-mode: dedicated
+  - name: sapui5-provider
+    properties:
+      url: 'https://sapui5.hana.ondemand.com'
+  - name: site-client-d88d4760-14e3-11e9-bf5d-156f91c4eb38
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: portal-services
+      service-plan: site-content
+      config:
+        siteId: d88d4760-14e3-11e9-bf5d-156f91c4eb38
+  - name: tutorial-frontend
+    properties:
+      url: firstapp-cf-frontend-p1941832406trial.cfapps.eu10.hana.ondemand.com
+  - name: tutorial-backend
+    properties:
+      url: https://firstapp-cf-p1941832406trial.cfapps.eu10.hana.ondemand.com

@@ -1,0 +1,19 @@
+{
+  "routes":[
+    {
+      "localDir": "themes",
+      "source": "/themes/(.*)",
+      "cacheControl": "public, max-age=31536000,must-revalidate",
+      "target": "$1"
+    },
+    {
+      "source": "^/explore-bupa/(.*)",
+      "target": "$1",
+      "destination": "frontend"
+    },
+    {
+      "source": "^/businesspartners",
+      "destination": "backend"
+    }
+  ]
+}
