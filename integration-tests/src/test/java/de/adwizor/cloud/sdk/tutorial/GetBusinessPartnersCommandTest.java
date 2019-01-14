@@ -1,6 +1,8 @@
 package de.adwizor.cloud.sdk.tutorial;
 
 import com.sap.cloud.sdk.cloudplatform.servlet.RequestContextExecutor;
+import com.sap.cloud.sdk.s4hana.connectivity.ErpConfigContext;
+import com.sap.cloud.sdk.s4hana.datamodel.odata.services.DefaultBusinessPartnerService;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -26,7 +28,7 @@ public class GetBusinessPartnersCommandTest {
     }
 
     private List<BusinessPartner> getBusinessPartners() {
-        return new GetBusinessPartnersCommand().execute();
+        return new GetBusinessPartnersCommand(new ErpConfigContext(), new DefaultBusinessPartnerService()).execute();
     }
 
     @Test

@@ -1,6 +1,7 @@
 package de.adwizor.cloud.sdk.tutorial;
 
 import com.google.gson.Gson;
+import com.sap.cloud.sdk.s4hana.connectivity.ErpConfigContext;
 import org.slf4j.Logger;
 
 import javax.servlet.ServletException;
@@ -29,8 +30,7 @@ public class BusinessPartnerServlet extends HttpServlet {
             throws ServletException, IOException {
         try {
             final List<BusinessPartner> businessPartners =
-                    new GetBusinessPartnersCommand().execute();
-
+                    new GetBusinessPartnersCommand(new ErpConfigContext(), new DefaultBusinessPartnerService()).execute();
             response.setContentType("application/json");
             response.getWriter().write(new Gson().toJson(businessPartners));
 

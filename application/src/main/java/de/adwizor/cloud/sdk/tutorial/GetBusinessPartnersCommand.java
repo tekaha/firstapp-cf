@@ -1,11 +1,15 @@
 package de.adwizor.cloud.sdk.tutorial;
 
 import com.netflix.hystrix.HystrixThreadPoolProperties;
+import com.netflix.hystrix.exception.HystrixBadRequestException;
 import com.sap.cloud.sdk.cloudplatform.logging.CloudLoggerFactory;
 import com.sap.cloud.sdk.frameworks.hystrix.HystrixUtil;
+import com.sap.cloud.sdk.odatav2.connectivity.ODataException;
 import com.sap.cloud.sdk.s4hana.connectivity.ErpCommand;
+import com.sap.cloud.sdk.s4hana.connectivity.ErpConfigContext;
 import com.sap.cloud.sdk.s4hana.datamodel.odata.helper.Order;
 import com.sap.cloud.sdk.s4hana.datamodel.odata.namespaces.businesspartner.BusinessPartner;
+import com.sap.cloud.sdk.s4hana.datamodel.odata.services.BusinessPartnerService;
 import com.sap.cloud.sdk.s4hana.datamodel.odata.services.DefaultBusinessPartnerService;
 import org.slf4j.Logger;
 
@@ -15,44 +19,31 @@ import java.util.List;
 
 public class GetBusinessPartnersCommand extends ErpCommand<List<BusinessPartner>> {
 
+    private BusinessPartnerService businessPartnerService;
+
     private static final Logger logger = CloudLoggerFactory.getLogger(GetBusinessPartnersCommand.class);
 
     private static final String CATEGORY_PERSON = "1";
 
-    protected GetBusinessPartnersCommand() {
-        //super(GetBusinessPartnersCommand.class);
-        super(HystrixUtil
-                .getDefaultErpCommandSetter(
-                        GetBusinessPartnersCommand.class,
-                        HystrixUtil.getDefaultErpCommandProperties()
-                            .withExecutionTimeoutInMilliseconds(10000)
-                )
-                .andThreadPoolPropertiesDefaults(HystrixThreadPoolProperties.Setter()
-                        .withCoreSize(20))
-        );
+    public GetBusinessPartnersCommand(ErpConfigContext erpConfigContext, BusinessPartnerService businessPartnerService) {
+        super(GetBusinessPartnersCommand.class, erpConfigContext);
+        this.businessPartnerService = businessPartnerService;
     }
 
     @Override
-    protected List<BusinessPartner> run() throws Exception {
-        final List<BusinessPartner> businessPartners =
-                new DefaultBusinessPartnerService()
-                        .getAllBusinessPartner()
-                        .select(BusinessPartner.BUSINESS_PARTNER,
-                                BusinessPartner.LAST_NAME,
-                                BusinessPartner.FIRST_NAME,
-                                BusinessPartner.IS_MALE,
-                                BusinessPartner.IS_FEMALE,
-                                BusinessPartner.CREATION_DATE)
-                        .filter(BusinessPartner.BUSINESS_PARTNER_CATEGORY.eq(CATEGORY_PERSON))
-                        .orderBy(BusinessPartner.LAST_NAME, Order.ASC)
-                        .top(10)
-                        .execute();
-        return businessPartners;
+    protected List<BusinessPartner> run() {
+
+        try {
+
+            return businessPartnerService.getAllBusinessPartner()
+                    .filter(BusinessPartner.IS_NATURAL_PERSON.eq("X"))
+                    .select(BusinessPartner.FIRST_NAME,
+                            BusinessPartner.LAST_NAME)
+                    .execute(getConfigContext());
+        } catch (final ODataException e) {
+            throw new HystrixBadRequestException(e.getMessage(), e);
+        }
+
     }
 
-    @Override
-    protected List<BusinessPartner> getFallback() {
-        logger.warn("Fallback called because of exception:", getExecutionException());
-        return Collections.emptyList();
-    }
 }
