@@ -5,7 +5,6 @@ import com.netflix.hystrix.exception.HystrixBadRequestException;
 import com.sap.cloud.sdk.odatav2.connectivity.ODataException;
 import com.sap.cloud.sdk.odatav2.connectivity.ODataExceptionType;
 import com.sap.cloud.sdk.s4hana.connectivity.ErpConfigContext;
-import com.sap.cloud.sdk.s4hana.datamodel.odata.helper.EntityField;
 import com.sap.cloud.sdk.s4hana.datamodel.odata.helper.ExpressionFluentHelper;
 import com.sap.cloud.sdk.s4hana.datamodel.odata.namespaces.businesspartner.BusinessPartner;
 import com.sap.cloud.sdk.s4hana.datamodel.odata.namespaces.businesspartner.selectable.BusinessPartnerSelectable;

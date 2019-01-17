@@ -15,6 +15,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Answers;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.net.URI;
@@ -89,5 +90,34 @@ public class GetBusinessPartnerMockedTestEnhanced {
             .thenThrow(new ODataException(ODataExceptionType.METADATA_FETCH_FAILED, "Something went wrong", null));
 
         new GetBusinessPartnersCommand(new ErpConfigContext(), service).execute();
+    }
+
+    @Test
+    public void testBusinessPartnerCreateSuccessful() throws Exception {
+
+        final BusinessPartner enrichedAlice = Mockito.mock(BusinessPartner.class);
+
+        when(enrichedAlice.getFirstName()).thenReturn("Alice");
+        when(enrichedAlice.getBusinessPartner()).thenReturn("123");
+
+        when(service
+                .createBusinessPartner(alice)
+                .execute(any(ErpConfigContext.class)))
+            .thenReturn(enrichedAlice);
+
+        BusinessPartner partner = new StoreBusinessPartnerCommand(new ErpConfigContext(), service, alice).execute();
+        assertEquals(enrichedAlice, partner);
+        assertEquals("123", enrichedAlice.getBusinessPartner());
+    }
+
+    @Test(expected = HystrixBadRequestException.class)
+    public void testBusinessPartnerCreateNotSuccessful() throws Exception {
+
+        when(service
+                .createBusinessPartner(alice)
+                .execute(any(ErpConfigContext.class)))
+            .thenThrow(new ODataException());
+
+        new StoreBusinessPartnerCommand(new ErpConfigContext(), service, alice).execute();
     }
 }
